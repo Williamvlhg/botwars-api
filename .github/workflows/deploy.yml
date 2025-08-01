@@ -24,4 +24,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/williamvlhg/botwar-api:latest
+          tags: ghcr.io/williamvlhg/botwars-api:latest
