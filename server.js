@@ -53,21 +53,6 @@ wss.on('connection', (ws) => {
   });
 });
 
-app.post('/changeAction', (req, res) => {
-  const command = req.body;
-  console.log('Received HTTP command:', command);
-
-  const response = {
-    move: command.move || 'STAY',
-    action: command.action || 'NONE',
-  };
-
-  if (command.action === 'BOMB') {
-    response.bombType = command.bombType || 'proximity';
-  }
-  res.json(response);
-});
-
 app.get('/action', (req, res) => {
   if (lastWebSocketResponse) {
     res.json(lastWebSocketResponse);
