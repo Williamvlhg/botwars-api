@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bot Controller</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; background: #f0f0f0; }
+        #status { font-weight: bold; padding: 5px 10px; border-radius: 5px; }
+        #last-command { margin-top: 20px; font-family: monospace; background: #fff; padding: 15px; border: 1px solid #ccc; min-height: 50px; }
+        .instructions { margin-top: 30px; color: #555; }
+    </style>
+</head>
+<body>
+    <h1>Bot Controller</h1>
+    <p>Status: <span id="status">Disconnected</span></p>
+    <div id="last-command">Appuyez sur une touche pour envoyer une commande...</div>
+    <div class="instructions">
+        <p><b>Contrôles :</b></p>
+        <p>Flèches : Déplacer (UP, DOWN, LEFT, RIGHT)</p>
+        <p>Espace : COLLECT</p>
+        <p>B : Placer une BOMB</p>
+    </div>
+
+    <script>
+        const statusEl = document.getElementById('status');
+        const commandEl = document.getElementById('last-command');
+
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        const ws = new WebSocket(`${protocol}://${window.location.host}`);
+
+        ws.onopen = () => {
+            statusEl.textContent = 'Connected';
+            statusEl.style.color = 'green';
+            statusEl.style.background = '#e0ffe0';
+        };
+
+        ws.onmessage = (event) => {
+            console.log('Réponse du serveur:', event.data);
+            commandEl.textContent = `Réponse reçue : ${event.data}`;
+        };
+
+        ws.onclose = () => {
+            statusEl.textContent = 'Disconnected';
+            statusEl.style.color = 'red';
+            statusEl.style.background = '#ffe0e0';
+        };
+
+        // Écoute les pressions de touches sur toute la page
+        document.addEventListener('keydown', (event) => {
+            // Si la connexion n'est pas ouverte, on ne fait rien
+            if (ws.readyState !== ws.OPEN) return;
+
+            let command = {};
+            switch (event.key) {
+                case 'ArrowUp':
+                    command = { move: 'UP' };
+                    break;
+                case 'ArrowDown':
+                    command = { move: 'DOWN' };
+                    break;
+                case 'ArrowLeft':
+                    command = { move: 'LEFT' };
+                    break;
+                case 'ArrowRight':
+                    command = { move: 'RIGHT' };
+                    break;
+                case ' ': 
+                    command = { action: 'COLLECT' };
+                    event.preventDefault(); 
+                    break;
+                case 'b':
+                case 'B':
+                    command = { action: 'BOMB', bombType: 'proximity' };
+                    break;
+                default:
+                    return; 
+            }
+            
+            const commandString = JSON.stringify(command);
+            ws.send(commandString);
+            commandEl.textContent = `Commande envoyée : ${commandString}`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "botwar",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch"
+  },
+  "type": "module",
+  "dependencies": {
+    "cross-env": "^10.0.0",
+    "express": "^5.1.0",
+    "jest": "^30.0.5",
+    "supertest": "^7.1.4",
+    "ws": "^8.18.3"
+  }
+}
