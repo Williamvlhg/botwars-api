@@ -53,7 +53,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-app.post('/action', (req, res) => {
+app.post('/changeAction', (req, res) => {
   const command = req.body;
   console.log('Received HTTP command:', command);
 
@@ -68,7 +68,7 @@ app.post('/action', (req, res) => {
   res.json(response);
 });
 
-app.get('/last-response', (req, res) => {
+app.get('/action', (req, res) => {
   if (lastWebSocketResponse) {
     res.json(lastWebSocketResponse);
   } else {
