@@ -45,7 +45,6 @@
             statusEl.style.background = '#ffe0e0';
         };
 
-        // Écoute les pressions de touches sur toute la page
         document.addEventListener('keydown', (event) => {
             // Si la connexion n'est pas ouverte, on ne fait rien
             if (ws.readyState !== ws.OPEN) return;
